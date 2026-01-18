@@ -1436,5 +1436,10 @@
   "deliver_the_reception_desk": "Entregar en la recepción",
   "avoid_calling_phone": "Evitar llamar por teléfono",
   "come_with_no_sound": "Ven sin sonido",
-  "used": "Usado"
+  "used": "Usado",
+  "digital_product": "Producto Digital",
+  "is_digital_product": "Este es un Producto Digital",
+  "user_fillable": "Rellenable por el Usuario",
+  "digital_code": "Código Digital",
+  "add_at_least_one_digital_code": "Por favor agregue al menos un código digital"
 }

@@ -1437,5 +1437,10 @@
   "deliver_the_reception_desk": "التوصيل إلى مكتب الاستقبال",
   "avoid_calling_phone": "تجنب الاتصال بالهاتف",
   "come_with_no_sound": "تعال دون صوت",
-  "used": "مستخدم"
+  "used": "مستخدم",
+  "digital_product": "منتج رقمي",
+  "is_digital_product": "هذا منتج رقمي",
+  "user_fillable": "قابل للملء من قبل المستخدم",
+  "digital_code": "الرمز الرقمي",
+  "add_at_least_one_digital_code": "يرجى إضافة رمز رقمي واحد على الأقل"
 }

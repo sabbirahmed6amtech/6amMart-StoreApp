@@ -1436,5 +1436,10 @@
   "deliver_the_reception_desk": "রিসেপশনে পৌঁছে দাও",
   "avoid_calling_phone": "ফোন করা থেকে বিরত থাকো",
   "come_with_no_sound": "নিঃশব্দে আসো",
-  "used": "ব্যবহৃত"
+  "used": "ব্যবহৃত",
+  "digital_product": "ডিজিটাল পণ্য",
+  "is_digital_product": "এটি একটি ডিজিটাল পণ্য",
+  "user_fillable": "ব্যবহারকারী ভরণযোগ্য",
+  "digital_code": "ডিজিটাল কোড",
+  "add_at_least_one_digital_code": "অন্তত একটি ডিজিটাল কোড যোগ করুন"
 }

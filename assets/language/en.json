@@ -1437,5 +1437,10 @@
   "deliver_the_reception_desk": "Deliver to the reception desk",
   "avoid_calling_phone": "Avoid Calling Phone",
   "come_with_no_sound": "Come with no sound",
-  "used" : "Used"
+  "used" : "Used",
+  "digital_product": "Digital Product",
+  "is_digital_product": "This is a Digital Product",
+  "user_fillable": "User Fillable",
+  "digital_code": "Digital Code",
+  "add_at_least_one_digital_code": "Please add at least one digital code"
 }
