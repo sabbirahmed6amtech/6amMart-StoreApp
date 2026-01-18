@@ -48,4 +48,5 @@ abstract class StoreServiceInterface {
   Future<List<SuitableTagModel>?> getSuitableTagList();
   int? setSuitableTagIndex(List<SuitableTagModel>? suitableTag, Item? item);
   Future<List<VatTaxModel>?> getVatTaxList();
+  Future<Response> useDigitalCode(int itemId, int orderId);
 }

@@ -60,6 +60,7 @@ class _AddItemScreenState extends State<AddItemScreen> with TickerProviderStateM
   TextEditingController _nutritionSuggestionController = TextEditingController();
   TextEditingController _allergicIngredientsSuggestionController = TextEditingController();
   final TextEditingController _genericNameSuggestionController = TextEditingController();
+  final TextEditingController _digitalCodeController = TextEditingController();
 
   final List<FocusNode> _nameFocusList = [];
   final List<FocusNode> _descriptionFocusList = [];
@@ -1465,6 +1466,95 @@ class _AddItemScreenState extends State<AddItemScreen> with TickerProviderStateM
                       ]),
                     ),
                     const SizedBox(height: Dimensions.paddingSizeDefault),
+                    Text('digital_product'.tr, style: robotoBold),
+                    const SizedBox(height: Dimensions.paddingSizeSmall),
+                    AnimatedBorderContainer(
+                      padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                      isLoading: aiController.otherDataLoading,
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        ListTile(
+                          onTap: () => storeController.toggleDigital(),
+                          leading: Checkbox(
+                            activeColor: Theme.of(context).primaryColor,
+                            value: storeController.isDigital,
+                            onChanged: (bool? isChecked) => storeController.toggleDigital(),
+                          ),
+                          title: Text('is_digital_product'.tr, style: robotoMedium),
+                          contentPadding: EdgeInsets.zero,
+                          dense: true,
+                          horizontalTitleGap: 0,
+                        ),
+                        SizedBox(height: storeController.isDigital ? Dimensions.paddingSizeDefault : 0),
+
+                        storeController.isDigital ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          ListTile(
+                            onTap: () => storeController.toggleUserFillable(),
+                            leading: Checkbox(
+                              activeColor: Theme.of(context).primaryColor,
+                              value: storeController.isUserFillable,
+                              onChanged: (bool? isChecked) => storeController.toggleUserFillable(),
+                            ),
+                            title: Text('user_fillable'.tr, style: robotoMedium),
+                            contentPadding: EdgeInsets.zero,
+                            dense: true,
+                            horizontalTitleGap: 0,
+                          ),
+                          SizedBox(height: storeController.isUserFillable ? 0 : Dimensions.paddingSizeDefault),
+                          !storeController.isUserFillable ? Column(children: [
+                            Row(children: [
+                              Expanded(
+                                flex: 8,
+                                child: CustomTextFieldWidget(
+                                  hintText: 'digital_code'.tr,
+                                  labelText: 'digital_code'.tr,
+                                  controller: _digitalCodeController,
+                                  inputAction: TextInputAction.done,
+                                  onSubmit: (code){
+                                    if(code != null && code.isNotEmpty) {
+                                      storeController.setDigitalCode(code);
+                                      _digitalCodeController.text = '';
+                                    }
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: Dimensions.paddingSizeSmall),
+
+                              Expanded(
+                                flex: 2,
+                                child: CustomButtonWidget(buttonText: 'add'.tr, onPressed: (){
+                                  if(_digitalCodeController.text.isNotEmpty) {
+                                    storeController.setDigitalCode(_digitalCodeController.text.trim());
+                                    _digitalCodeController.text = '';
+                                  }
+                                }),
+                              ),
+                            ]),
+                            const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                            storeController.digitalCodeList.isNotEmpty ? SizedBox(
+                              height: 40,
+                              child: ListView.builder(
+                                  shrinkWrap: true, scrollDirection: Axis.horizontal,
+                                  itemCount: storeController.digitalCodeList.length,
+                                  itemBuilder: (context, index){
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall),
+                                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
+                                      decoration: BoxDecoration(color: Theme.of(context).disabledColor.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
+                                      child: Center(child: Row(children: [
+                                        Text(storeController.digitalCodeList[index], style: robotoRegular.copyWith(color: Theme.of(context).disabledColor.withValues(alpha: 0.7))),
+                                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                                        InkWell(onTap: () => storeController.removeDigitalCode(index), child: Icon(Icons.clear, size: 18, color: Theme.of(context).disabledColor.withValues(alpha: 0.7))),
+                                      ])),
+                                    );
+                                  }),
+                            ) : const SizedBox(),
+                          ]) : const SizedBox(),
+                        ]) : const SizedBox(),
+                      ]),
+                    ),
+                    const SizedBox(height: Dimensions.paddingSizeDefault),
 
                     _module.itemAvailableTime! ? Text('availability'.tr, style: robotoBold) : const SizedBox(),
                     SizedBox(height: _module.itemAvailableTime! ? Dimensions.paddingSizeSmall : 0),
@@ -1817,6 +1907,8 @@ class _AddItemScreenState extends State<AddItemScreen> with TickerProviderStateM
                         showCustomSnackBar('discount_cant_be_more_then_minimum_variation_price'.tr);
                       }else if(Get.find<SplashController>().configModel!.systemTaxType == 'product_wise' && storeController.selectedVatTaxIdList.isEmpty) {
                         showCustomSnackBar('select_vat_tax'.tr);
+                      }else if(storeController.isDigital && !storeController.isUserFillable && storeController.digitalCodeList.isEmpty) {
+                        showCustomSnackBar('add_at_least_one_digital_code'.tr);
                       }else {
                         _item.veg = storeController.isVeg ? 1 : 0;
                         _item.isPrescriptionRequired = storeController.isPrescriptionRequired ? 1 : 0;
@@ -1869,6 +1961,12 @@ class _AddItemScreenState extends State<AddItemScreen> with TickerProviderStateM
 
                         _item.brandId = storeController.brandList != null && storeController.brandList!.isNotEmpty ? storeController.brandList![storeController.brandIndex!].id : 0;
                         _item.conditionId = storeController.suitableTagList != null && storeController.suitableTagList!.isNotEmpty ? storeController.suitableTagList![storeController.suitableTagIndex!].id : 0;
+                        _item.isDigital = storeController.isDigital;
+                        _item.isUserFillable = storeController.isUserFillable;
+                        _item.digitalCodes = [];
+                        for (String code in storeController.digitalCodeList) {
+                          _item.digitalCodes!.add(DigitalCode(code: code));
+                        }
                         bool hasEmptyValue = false;
                         if(Get.find<SplashController>().getStoreModuleConfig().newVariation!) {
                           _item.foodVariations = [];

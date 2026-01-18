@@ -39,7 +39,10 @@ class StoreService implements StoreServiceInterface {
   Future<Item?> getPendingItemDetails(int itemId) async {
     return await storeRepositoryInterface.getPendingItemDetails(itemId);
   }
-
+  @override
+  Future<Response> useDigitalCode(int itemId, int orderId) async {
+    return await storeRepositoryInterface.useDigitalCode(itemId, orderId);
+  }
   @override
   Future<Item?> getItemDetails(int itemId) async {
     return await storeRepositoryInterface.get(itemId);
