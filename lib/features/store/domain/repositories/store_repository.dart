@@ -193,7 +193,15 @@ class StoreRepository implements StoreRepositoryInterface {
     if(Get.find<SplashController>().configModel!.systemTaxType == 'product_wise'){
       fields.addAll({'tax_ids': jsonEncode(item.taxVatIds)});
     }
-
+    if(item.isDigital!) {
+      fields.addAll({'is_digital': '1'});
+      fields.addAll({'is_user_fillable': item.isUserFillable! ? '1' : '0'});
+      List<Map<String, String>> digitalCodesData = [];
+      for(DigitalCode code in item.digitalCodes ?? []) {
+        digitalCodesData.add({'code': code.code ?? ''});
+      }
+      fields.addAll({'digital_codes': jsonEncode(digitalCodesData)});
+    }
     List<MultipartBody> images0 = [];
     images0.add(MultipartBody('image', image));
     for(int index=0; index<images.length; index++) {
@@ -381,6 +389,16 @@ class StoreRepository implements StoreRepositoryInterface {
       response.body.forEach((vatTax) => vatTaxList!.add(VatTaxModel.fromJson(vatTax)));
     }
     return vatTaxList;
+  }
+
+  @override
+  Future<Response> useDigitalCode(int itemId, int orderId) async {
+    Map<String, String> body = {
+      'item_id': itemId.toString(),
+      'order_id': orderId.toString(),
+    };
+    Response response = await apiClient.postData(AppConstants.digitalCodeUseUri, body, handleError: false);
+    return response;
   }
 
 }

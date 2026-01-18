@@ -116,6 +116,7 @@ class AppConstants {
   static const String addonCategoryList = '/api/v1/addon-category/list';
   static const String getTaxReportUri = '/api/v1/vendor/get-tax-report';
   static const String categoryWiseProducts = '/api/v1/vendor/categories/category-wise-products';
+  static const String digitalCodeUseUri = '/api/v1/vendor/digital-code-use';
 
   /// Subscription url
   static const String restaurantPackagesUri = '/api/v1/vendor/package-view';

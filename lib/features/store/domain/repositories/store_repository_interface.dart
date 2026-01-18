@@ -33,4 +33,5 @@ abstract class StoreRepositoryInterface<T> extends RepositoryInterface<Schedules
   Future<Response> stockUpdate(Map<String, String> data);
   Future<List<SuitableTagModel>?> getSuitableTagList();
   Future<List<VatTaxModel>?> getVatTaxList();
+  Future<Response> useDigitalCode(int itemId, int orderId);
 }
