@@ -102,7 +102,9 @@ class Item {
   int? isRejected;
   String? note;
   List<TaxData>? taxData;
-
+  bool? isDigital;
+  bool? isUserFillable;
+  List<DigitalCode>? digitalCodes;
   Item({
     this.id,
     this.name,
@@ -157,6 +159,9 @@ class Item {
     this.isRejected,
     this.note,
     this.taxData,
+    this.isDigital,
+    this.isUserFillable,
+    this.digitalCodes,
   });
 
   Item.fromJson(Map<String, dynamic> json) {
@@ -299,6 +304,18 @@ class Item {
       taxData = <TaxData>[];
       json['tax_data'].forEach((v) { taxData!.add(TaxData.fromJson(v)); });
     }
+    if(json['is_digital'] != null){
+      isDigital = json['is_digital'];
+    }
+    if(json['is_user_fillable'] != null){
+      isDigital = json['is_user_fillable'];
+    }
+    if (json['digital_codes'] != null) {
+      digitalCodes = <DigitalCode>[];
+      json['digital_codes'].forEach((v) {
+        digitalCodes!.add(DigitalCode.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -384,6 +401,11 @@ class Item {
     data['note'] = note;
     if (taxData != null) {
       data['tax_data'] = taxData!.map((v) => v.toJson()).toList();
+    }
+    data['is_digital'] = isDigital;
+    data['is_user_fillable'] = isUserFillable;
+    if (digitalCodes != null) {
+      data['digital_codes'] = digitalCodes!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -679,6 +701,24 @@ class TaxData {
     data['id'] = id;
     data['name'] = name;
     data['tax_rate'] = taxRate;
+    return data;
+  }
+}
+class DigitalCode {
+  int? id;
+  String? code;
+
+  DigitalCode({this.id, this.code});
+
+  DigitalCode.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    code = json['code'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['code'] = code;
     return data;
   }
 }

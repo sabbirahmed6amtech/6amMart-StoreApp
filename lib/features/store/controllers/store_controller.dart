@@ -286,7 +286,28 @@ class StoreController extends GetxController implements GetxService {
   String? _availableTimeEnds;
   String? get availableTimeEnds => _availableTimeEnds;
 
+  bool _isDigital = false;
+  bool get isDigital => _isDigital;
+
+  bool _isUserFillable = false;
+  bool get isUserFillable => _isUserFillable;
+
+  final List<String> _digitalCodeList = [];
+  List<String> get digitalCodeList => _digitalCodeList;
+
   void initItemData({Item? item, bool isFood = false, bool isGrocery = false, bool isPharmacy = false}) {
+    _isDigital = false;
+    _isUserFillable = false;
+    _digitalCodeList.clear();
+    if (item != null && item.isDigital == 1) {
+      _isDigital = true;
+      _isUserFillable = item.isUserFillable == 1;
+      if (item.digitalCodes != null) {
+        for (var digitalCode in item.digitalCodes!) {
+          _digitalCodeList.add(digitalCode.code ?? '');
+        }
+      }
+    }
     if(isFood || isGrocery) {
       _getNutritionSuggestionList();
       _getAllergicIngredientsSuggestionList();
@@ -347,6 +368,33 @@ class StoreController extends GetxController implements GetxService {
     _isPrescriptionRequired = false;
     _isHalal = false;
     _isBasicMedicine = false;
+    _isUserFillable = false;
+    _digitalCodeList.clear();
+  }
+  void toggleDigital({bool willUpdate = true}) {
+    _isDigital = !_isDigital;
+    if (!_isDigital) {
+      _isUserFillable = false;
+      _digitalCodeList.clear();
+    }
+    if (willUpdate) update();
+  }
+
+  void toggleUserFillable({bool willUpdate = true}) {
+    _isUserFillable = !_isUserFillable;
+    if (willUpdate) update();
+  }
+
+  void setDigitalCode(String? code, {bool willUpdate = true}) {
+    if (code != null && code.isNotEmpty) {
+      _digitalCodeList.add(code);
+      if (willUpdate) update();
+    }
+  }
+
+  void removeDigitalCode(int index) {
+    _digitalCodeList.removeAt(index);
+    update();
   }
 
   void setLanguageSelect(int index) {
